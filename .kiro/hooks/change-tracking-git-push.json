@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "change-tracking-git-push",
+      "description": "监听终端执行工具，检测 git push 命令并自动生成变更记录",
+      "trigger": "PostToolUse",
+      "matcher": "execute_pwsh|execute_bash",
+      "action": {
+        "type": "agent",
+        "prompt": "检查刚才执行的终端命令是否包含 'git push'。\n\n如果命令包含 'git push'（包括 git push origin、git push -u 等变体）：\n1. 确认 push 操作已成功完成\n2. 自动开始生成变更记录（留痕文档）\n3. 收集 Git 信息（分支、commit hash、push 的 commit 范围）\n4. 整理本次修改的文件列表和具体改动\n5. 分析修改原因和影响\n6. 记录开发过程中的踩坑经历（如有误判误改）\n7. 生成 Markdown 格式的变更记录文档\n8. 保存到 docs/change-logs/ 目录\n\n如果命令不包含 'git push'，则不执行任何操作。\n\n注意：只在 push 成功后生成变更记录，如果 push 失败则不生成。"
+      },
+      "timeout": 120
+    }
+  ]
+}

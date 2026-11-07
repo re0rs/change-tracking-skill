@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "change-tracking-code-modification",
+      "description": "代码修改完成后询问是否生成变更记录",
+      "trigger": "PostToolUse",
+      "matcher": "fs_write|str_replace|fs_append",
+      "action": {
+        "type": "agent",
+        "prompt": "检测到代码修改已完成。请询问用户是否需要生成变更记录（留痕文档）。\n\n如果用户确认需要生成，请按照以下步骤操作：\n1. 收集 Git 信息（分支、commit hash）\n2. 整理本次修改的文件列表和具体改动\n3. 分析修改原因和影响\n4. 记录开发过程中的踩坑经历（如有误判误改）\n5. 生成 Markdown 格式的变更记录文档\n6. 保存到 docs/change-logs/ 目录\n\n如果用户选择跳过，则终止流程不再询问。"
+      },
+      "timeout": 120
+    }
+  ]
+}
