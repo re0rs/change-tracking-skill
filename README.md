@@ -4,7 +4,8 @@
 
 ## ✨ 功能特性
 
-- 🔄 **自动触发**：代码修改后询问、用户确认后自动生成、Git Push 后自动生成
+- 🔄 **智能触发**：会话结束时统一询问、Git Push 成功后自动生成
+- 🎯 **低干扰**：使用轻量级脚本做前置判断，避免频繁打断工作流
 - 📝 **详细记录**：记录修改原因、涉及代码、踩坑经历、影响分析
 - 🔍 **误判追踪**：记录每一次误判误改及其原因分析
 - 🏷️ **智能标签**：自动推荐标签和变更类型分类
@@ -32,16 +33,15 @@
 
 ### 触发方式
 
-**方式一：代码修改后询问**
-- 当你完成代码修改后，系统会询问是否需要生成变更记录
+**方式一：会话结束时询问**
+- 当会话结束时，如果有代码修改，系统会询问是否需要生成变更记录
+- 避免每次文件修改都触发，只在会话结束时统一处理
 
-**方式二：用户确认后自动生成**
-- 当你在对话中确认"修改完成"、"好的"、"成功了"等，系统会自动生成
-
-**方式三：Git Push 后自动生成**
+**方式二：Git Push 后自动生成**
 - 当你通过 AI 执行 `git push` 命令后，系统会自动生成
+- 使用轻量级脚本判断，只有真正的 push 成功才触发
 
-**方式四：手动触发**
+**方式三：手动触发**
 ```
 请为刚才的修改生成变更记录
 ```
@@ -58,9 +58,8 @@ docs/change-logs/YYYY-MM-DD_HHmmss_简短描述.md
 ```
 .kiro/
 ├── hooks/                                    # Hook 配置
-│   ├── change-tracking-code-modification.json
-│   ├── change-tracking-user-confirmation.json
-│   └── change-tracking-git-push.json
+│   ├── change-tracking-code-modification.json  # 会话结束时触发
+│   └── change-tracking-git-push.json           # git push 后触发
 ├── skills/
 │   └── change-tracking/                      # Skill 核心
 │       ├── skill.md                          # 入口文件
@@ -75,6 +74,8 @@ docs/change-logs/YYYY-MM-DD_HHmmss_简短描述.md
 ├── steering/
 │   └── change-tracking.md                    # 最佳实践指南
 └── specs/
+scripts/
+└── check-git-push.js                         # git push 命令检测脚本
     └── change-tracking-skill/                # 需求和设计文档
         ├── requirements.md
         ├── design.md
